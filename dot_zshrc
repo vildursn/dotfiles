@@ -65,6 +65,12 @@ source "$ZSH/oh-my-zsh.sh"
 # Aliases
 # -------
 
+alias ThomasGPU="ssh vigj@tos-1039.ad.norceresearch.no"
+alias JonasGPU="ssh vigj@tos-1041.ad.norceresearch.no"
+alias CVAT="ssh -L 8500:localhost:8500 -L 8501:localhost:8501 -L 8080:localhost:8080 -N vigj@tos-1039.ad.norceresearch.no
+"
+#
+
 alias less="less -R"
 alias printenv="printenv | LC_ALL=C sort"
 alias tree="tree -CA"
