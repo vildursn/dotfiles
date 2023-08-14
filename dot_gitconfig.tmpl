@@ -1,0 +1,65 @@
+[user]
+	name = Vilde Gjærum
+	email = vildegjaerum@gmail.com
+
+[credential]
+	helper = {{ .git.credential.helper }}
+
+[core]
+	autocrlf = input
+	pager = less -x1,5
+
+[push]
+	default = current
+
+[init]
+	defaultBranch = main
+
+[advice]
+	statusHints = false
+
+[help]
+	autocorrect = 1
+
+[alias]
+	root = rev-parse --show-toplevel
+
+[color]
+	ui = always
+
+[color "diff"]
+	meta = yellow bold
+	commit = green bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "status"]
+	added = green
+	updated = green
+	changed = yellow
+	untracked = blue
+
+[hub]
+	protocol = https
+
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+
+[include]
+	path = ~/.gitconfig.overrides

@@ -1,0 +1,135 @@
+##
+# Exports
+# -------
+
+# Explicitly set XDG variables.
+export XDG_CACHE_HOME="${HOME}/.cache"
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_DATA_HOME="${HOME}/.local/share"
+export XDG_STATE_HOME="${HOME}/.local/state"
+
+# Locale
+export LANG="en_US.UTF-8"
+export LC_ALL="${LANG}"
+
+# Editors
+export EDITOR="code --wait"
+export GIT_EDITOR="${EDITOR} --new-window"
+
+if [[ "${TERM_PROGRAM}" == "vscode" ]]; then
+  export EDITOR="code --wait"
+  export GIT_EDITOR="${EDITOR} --reuse-window"
+elif [[ -n "${SSH_CLIENT}" ]]; then
+  export EDITOR="nano"
+  export GIT_EDITOR="${EDITOR}"
+fi
+
+# Homebrew
+export HOMEBREW_PREFIX="/opt/homebrew"
+if [[ -d "${HOMEBREW_PREFIX}" ]]; then
+  export HOMEBREW_CELLAR="${HOMEBREW_PREFIX}/Cellar"
+  export HOMEBREW_REPOSITORY="${HOMEBREW_PREFIX}"
+  export PATH="${HOMEBREW_PREFIX}/bin:${HOMEBREW_PREFIX}/sbin:${PATH}"
+  export MANPATH="${HOMEBREW_PREFIX}/share/man${MANPATH:+:${MANPATH}}"
+  export INFOPATH="${HOMEBREW_PREFIX}/share/info${INFOPATH:+:${INFOPATH}}"
+
+  export HOMEBREW_NO_ANALYTICS=1
+  export HOMEBREW_NO_ENV_HINTS=1
+fi
+
+# Go
+export GOPATH="${XDG_DATA_HOME}/go"
+if [[ -d "${GOPATH}" ]]; then
+  export PATH="${GOPATH}/bin:${PATH}"
+fi
+
+# Rust
+export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
+export CARGO_HOME="${XDG_DATA_HOME}/cargo"
+if [[ -d "${CARGO_HOME}" ]]; then
+  export PATH="${CARGO_HOME}/bin:${PATH}"
+fi
+
+# Conda
+if [[ -d "${HOME}/.local/miniconda3" ]]; then
+  conda_root="${HOME}/.local/miniconda3"
+  # Bootstrap using shellscript when possible.
+  if [[ -f "${conda_root}/etc/profile.d/conda.sh" ]]; then
+    source "${conda_root}/etc/profile.d/conda.sh"
+  else
+    export PATH="${conda_root}/bin:${PATH}"
+  fi
+fi
+
+# Pyenv
+export PYENV_ROOT="${HOME}/.pyenv"
+if [[ -d "${PYENV_ROOT}" ]]; then
+  export PATH="${PYENV_ROOT}/bin:${PATH}"
+
+  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+fi
+
+# Poetry
+export POETRY_CONFIG_DIR="${XDG_CONFIG_HOME}/poetry"
+export POETRY_HOME="${XDG_DATA_HOME}/poetry"
+
+# IPython
+export IPYTHONDIR="${XDG_CONFIG_HOME}/ipython"
+
+# Pipenv
+export PIPENV_VENV_IN_PROJECT=1
+
+# Docker
+if [[ -d "${HOME}/.docker/bin" ]]; then
+  export PATH="${HOME}/.docker/bin:${PATH}"
+fi
+
+# Rootless Docker
+# TODO: Find a better way to do this.
+if [[ -f "$XDG_CONFIG_HOME/systemd/user/default.target.wants/docker.service" ]]; then
+  export DOCKER_HOST="unix:///run/user/${UID}/docker.sock"
+fi
+
+# Google Cloud SDK
+if [[ -d "${XDG_DATA_HOME}/google-cloud-sdk" ]]; then
+  export CLOUDSDK_PYTHON="python3"
+  export CLOUDSDK_ROOT_DIR="${XDG_DATA_HOME}/google-cloud-sdk"
+  export PATH="${PATH}:${CLOUDSDK_ROOT_DIR}/bin"
+fi
+
+# BentoML
+export BENTOML_HOME="${XDG_DATA_HOME}/bentoml"
+if [[ -d "${BENTOML_HOME}" ]]; then
+  # Disable tracking.
+  # TODO: Check if this has to be "True" due to bad assumptions.
+  export BENTOML_DO_NOT_TRACK=1
+fi
+
+# BentoML CLI
+export BENTOCTL_HOME="${XDG_DATA_HOME}/bentoctl"
+if [[ -d "${BENTOCTL_HOME}" ]]; then
+  # Disable tracking.
+  # TODO: Check if this has to be "True" due to bad assumptions.
+  export BENTOCTL_DO_NOT_TRACK=1
+fi
+
+# User installed binaries
+export PATH="${HOME}/.local/bin:${PATH}"
+
+##
+# Certificates
+# ------------
+
+# Check if custom CA bundle exists.
+if [[ -f "${HOME}/.ssl/certs/bundle.pem" ]]; then
+  export CUSTOM_CA_BUNDLE="${HOME}/.ssl/certs/bundle.pem"
+  export SSL_CERT_FILE="${CUSTOM_CA_BUNDLE}"
+  export CURL_CA_BUNDLE="${CUSTOM_CA_BUNDLE}"
+  export REQUESTS_CA_BUNDLE="${CUSTOM_CA_BUNDLE}"
+  export NODE_EXTRA_CA_CERTS="${CUSTOM_CA_BUNDLE}"
+fi
+
+# Check if unsafe OpenSSL config exists.
+if [[ -f "${HOME}/.config/openssl/unsafe.cnf" ]]; then
+  export OPENSSL_CONF="${HOME}/.config/openssl/unsafe.cnf"
+fi

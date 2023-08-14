@@ -1,0 +1,6 @@
+LICENSE
+README.md
+
+docs/
+**/*.zwc
+.oh-my-zsh/cache/
